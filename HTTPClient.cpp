@@ -203,8 +203,8 @@ char
 HTTPClient::sendUriAndHeaders(FILE* stream, char* hostName, char* requestType, char* uri,
     http_client_parameter parameters[], http_client_parameter headers[])
 {
-  fprintf_P(stream, requestType, uri);
-  fprintf_P(stream, PSTR(" "), uri);
+  fprintf_P(stream, requestType);
+  fprintf_P(stream, PSTR(" "));
   //encode but use reserved characters
   HTTPClient::setEncoding(stream, 1, 0);
   fprintf_P(stream, PSTR("%s"), uri);
