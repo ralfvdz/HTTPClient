@@ -277,10 +277,6 @@ HTTPClient::sendContentPayload(FILE* stream, char* data)
 int
 HTTPClient::clientWrite(char byte, FILE* stream)
 {
-  if (stream == NULL)
-    {
-      return EOF;
-    }
   http_stream_udata* udata = (http_stream_udata*) fdev_get_udata(stream);
   HTTPClient* client = udata->client;
   if (client->connected() == 0)
@@ -329,28 +325,24 @@ HTTPClient::clientWrite(char byte, FILE* stream)
 int
 HTTPClient::clientRead(FILE* stream)
 {
-  if (stream == NULL)
-    {
-      return EOF;
-    }
   http_stream_udata* udata = (http_stream_udata*) fdev_get_udata(stream);
   HTTPClient* client = udata->client;
   if (!client->connected())
     {
-      return EOF;
+      return _FDEV_EOF;
     }
   //block until we got a byte
   while (client->available() == 0)
     {
       if (client->connected() == 0)
         {
-          return EOF;
+          return _FDEV_EOF;
         }
     };
   int result = client->read();
   if (result == EOF)
     {
-      return EOF;
+      return _FDEV_EOF;
     }
   if (client->debugCommunication)
     {
@@ -368,7 +360,7 @@ HTTPClient::clientRead(FILE* stream)
         {
           if (client->connected() == 0)
             {
-              return EOF;
+              return _FDEV_EOF;
             }
         };
       char return_value = 0;
@@ -377,7 +369,7 @@ HTTPClient::clientRead(FILE* stream)
           result = client->read();
           if (result == EOF)
             {
-              return EOF;
+              return _FDEV_EOF;
             }
           else if (result >= 'A' && result <= 'Z')
             {
